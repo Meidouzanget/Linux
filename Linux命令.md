@@ -404,3 +404,224 @@ mkdir 加上 -p：创建文件夹与子文件夹
 - g ：前进到这个数据的第一行去；
 - G ：前进到这个数据的最后一行去 （注意大小写）；
 - q ：离开 less 这个程序；
+
+
+
+## 数据截取
+
+- head （取出前面几行）
+
+```
+[[email protected] ~]# head [-n 显示行数] 文件
+选项与参数：
+-n  ：后面接数字，代表显示几行的意思
+
+[[email protected] ~]# head /etc/man_db.conf
+# 默认的情况中，显示前面十行！若要显示前 20 行，就得要这样：
+[[email protected] ~]# head -n 20 /etc/man_db.conf
+
+范例：如果后面100行的数据都不打印，只打印/etc/man_db.conf的前面几行，该如何是好？
+那就把不打印的行数减去，-100
+[[email protected] ~]# head -n -100 /etc/man_db.conf
+```
+
+
+
+- tail （取出后面几行）
+
+```
+[[email protected] ~]# tail [-n number] 文件
+选项与参数：
+-n  ：后面接数字，代表显示几行的意思
+-f  ：表示持续侦测后面所接的文件名，要等到按下[ctrl]-c才会结束tail的侦测
+
+[[email protected] ~]# tail /etc/man_db.conf
+# 默认的情况中，显示最后的十行！若要显示最后的 20 行，就得要这样：
+[[email protected] ~]# tail -n 20 /etc/man_db.conf
+
+范例一：如果不知道/etc/man_db.conf有几行，却只想列出100行以后的数据时？
+[[email protected] ~]# tail -n +100 /etc/man_db.conf
+
+范例二：持续侦测/var/log/messages的内容
+[[email protected] ~]# tail -f /var/log/messages
+  &lt;==要等到输入[crtl]-c之后才会离开tail这个指令的侦测！
+```
+
+
+
+### 打开非纯文本文件： od
+
+打开一些二进制的命令文件
+
+```
+[[email protected] ~]# od [-t TYPE] 文件
+选项或参数：
+-t  ：后面可以接各种“类型 （TYPE）”的输出，例如：
+      a       ：利用默认的字符来输出；
+      c       ：使用 ASCII 字符来输出
+      d[size] ：利用十进制（decimal）来输出数据，每个整数占用 size Bytes ；
+      f[size] ：利用浮点数值（floating）来输出数据，每个数占用 size Bytes ；
+      o[size] ：利用八进位（octal）来输出数据，每个整数占用 size Bytes ；
+      x[size] ：利用十六进制（hexadecimal）来输出数据，每个整数占用 size Bytes ；
+```
+
+
+
+### 修改文件时间或创建新文件： touch
+
+```
+[[email protected] ~]# touch [-acdmt] 文件
+选项与参数：
+-a  ：仅修订 access time；
+-c  ：仅修改文件的时间，若该文件不存在则不创建新文件；
+-d  ：后面可以接欲修订的日期而不用目前的日期，也可以使用 --date="日期或时间"
+-m  ：仅修改 mtime ；
+-t  ：后面可以接欲修订的时间而不用目前的时间，格式为[YYYYMMDDhhmm]
+```
+
+
+
+### 文件隐藏属性
+
+下面的chattr指令只能在Ext2/Ext3/Ext4的 Linux 传统文件系统上面完整生效
+
+- chattr （设置文件隐藏属性）
+
+```
+[[email protected] ~]# chattr [+-=][ASacdistu] 文件或目录名称
+选项与参数：
++   ：增加某一个特殊参数，其他原本存在参数则不动。
+-   ：移除某一个特殊参数，其他原本存在参数则不动。
+=   ：设置一定，且仅有后面接的参数
+
+A  ：当设置了 A 这个属性时，若你有存取此文件（或目录）时，他的存取时间 atime 将不会被修改，
+     可避免 I/O 较慢的机器过度的存取磁盘。（目前建议使用文件系统挂载参数处理这个项目）
+S  ：一般文件是非同步写入磁盘的（原理请参考[前一章sync](../Text/index.html#sync)的说明），如果加上 S 这个属性时，
+     当你进行任何文件的修改，该更动会“同步”写入磁盘中。
+a  ：当设置 a 之后，这个文件将只能增加数据，而不能删除也不能修改数据，只有root 才能设置这属性
+c  ：这个属性设置之后，将会自动的将此文件“压缩”，在读取的时候将会自动解压缩，
+     但是在储存的时候，将会先进行压缩后再储存（看来对于大文件似乎蛮有用的！）
+d  ：当 dump 程序被执行的时候，设置 d 属性将可使该文件（或目录）不会被 dump 备份
+i  ：这个 i 可就很厉害了！他可以让一个文件“不能被删除、改名、设置链接也无法写入或新增数据！”
+     对于系统安全性有相当大的助益！只有 root 能设置此属性
+s  ：当文件设置了 s 属性时，如果这个文件被删除，他将会被完全的移除出这个硬盘空间，
+     所以如果误删了，完全无法救回来了喔！
+u  ：与 s 相反的，当使用 u 来设置文件时，如果该文件被删除了，则数据内容其实还存在磁盘中，
+     可以使用来救援该文件喔！
+注意1：属性设置常见的是 a 与 i 的设置值，而且很多设置值必须要身为 root 才能设置
+注意2：xfs 文件系统仅支持 AadiS 而已
+```
+
+- 
+- lsattr （显示文件隐藏属性）
+
+```
+[[email protected] ~]# lsattr [-adR] 文件或目录
+选项与参数：
+-a ：将隐藏文件的属性也秀出来；
+-d ：如果接的是目录，仅列出目录本身的属性而非目录内的文件名；
+-R ：连同子目录的数据也一并列出来！
+```
+
+## 文件搜索
+
+### 1 指令文件名的搜寻
+
+```
+[[email protected] ~]# which [-a] command
+选项或参数：
+-a ：将所有由 PATH 目录中可以找到的指令均列出，而不止第一个被找到的指令名称
+
+范例一：搜寻 ifconfig 这个指令的完整文件名
+[[email protected] ~]# which ifconfig
+/sbin/ifconfig 
+```
+
+### 2 文件文件名的搜寻
+
+- whereis （由一些特定的目录中寻找文件文件名）
+
+```
+[[email protected] ~]# whereis [-bmsu] 文件或目录名
+选项与参数：
+-l    :可以列出 whereis 会去查询的几个主要目录而已
+-b    :只找 binary 格式的文件
+-m    :只找在说明文档 manual 路径下的文件
+-s    :只找 source 来源文件
+-u    :搜寻不在上述三个项目当中的其他特殊文件
+
+范例一：请找出 ifconfig 这个文件名
+[[email protected] ~]# whereis ifconfig 
+ifconfig: /sbin/ifconfig /usr/share/man/man8/ifconfig.8.gz
+```
+
+
+
+- locate （根据索引搜索）
+- updatedb（更新索引）
+
+```
+[[email protected] ~]# locate [-ir] keyword
+选项与参数：
+-i  ：忽略大小写的差异；
+-c  ：不输出文件名，仅计算找到的文件数量
+-l  ：仅输出几行的意思，例如输出五行则是 -l 5
+-S  ：输出 locate 所使用的数据库文件的相关信息，包括该数据库纪录的文件/目录数量等
+-r  ：后面可接正则表达式的显示方式
+
+范例一：找出系统中所有与 passwd 相关的文件名，且只列出 5 个
+[[email protected] ~]# locate -l 5 passwd
+/etc/passwd
+/etc/passwd-
+/etc/pam.d/passwd
+/etc/security/opasswd
+/usr/bin/gpasswd
+```
+
+
+
+- find（读取硬盘搜索）
+
+```
+[[email protected] ~]# find [PATH] [option] [action]
+选项与参数：
+1\. 与时间有关的选项：共有 -atime, -ctime 与 -mtime ，以 -mtime 说明
+   -mtime  n ：n 为数字，意义为在 n 天之前的“一天之内”被更动过内容的文件；
+   -mtime +n ：列出在 n 天之前（不含 n 天本身）被更动过内容的文件文件名；
+   -mtime -n ：列出在 n 天之内（含 n 天本身）被更动过内容的文件文件名。
+   -newer file ：file 为一个存在的文件，列出比 file 还要新的文件文件名
+
+范例一：将过去系统上面 24 小时内有更动过内容 （mtime） 的文件列出
+[[email protected] ~]# find / -mtime 0
+# 那个 0 是重点！0 代表目前的时间，所以，从现在开始到 24 小时前，
+# 有变动过内容的文件都会被列出来！那如果是三天前的 24 小时内？
+# find / -mtime 3 有变动过的文件都被列出的意思！
+
+范例二：寻找 /etc 下面的文件，如果文件日期比 /etc/passwd 新就列出
+[[email protected] ~]# find /etc -newer /etc/passwd
+# -newer 用在分辨两个文件之间的新旧关系是很有用的！
+```
+
+
+
+搜索参数
+
+```
+选项与参数：
+3\. 与文件权限及名称有关的参数：
+   -name filename：搜寻文件名称为 filename 的文件；
+   -size [+-]SIZE：搜寻比 SIZE 还要大（+）或小（-）的文件。这个 SIZE 的规格有：
+                   c: 代表 Byte， k: 代表 1024Bytes。所以，要找比 50KB
+                   还要大的文件，就是“ -size +50k ”
+   -type TYPE    ：搜寻文件的类型为 TYPE 的，类型主要有：一般正规文件 （f）, 设备文件 （b, c）,
+                   目录 （d）, 链接文件 （l）, socket （s）, 及 FIFO （p） 等属性。
+   -perm mode  ：搜寻文件权限“刚好等于” mode 的文件，这个 mode 为类似 chmod
+                 的属性值，举例来说， -rwsr-xr-x 的属性为 4755 ！
+   -perm -mode ：搜寻文件权限“必须要全部囊括 mode 的权限”的文件，举例来说，
+                 我们要搜寻 -rwxr--r-- ，亦即 0744 的文件，使用 -perm -0744，
+                 当一个文件的权限为 -rwsr-xr-x ，亦即 4755 时，也会被列出来，
+                 因为 -rwsr-xr-x 的属性已经囊括了 -rwxr--r-- 的属性了。
+   -perm /mode ：搜寻文件权限“包含任一 mode 的权限”的文件，举例来说，我们搜寻
+                 -rwxr-xr-x ，亦即 -perm /755 时，但一个文件属性为 -rw-------
+                 也会被列出来，因为他有 -rw.... 的属性存在！
+```
