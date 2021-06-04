@@ -625,3 +625,29 @@ ifconfig: /sbin/ifconfig /usr/share/man/man8/ifconfig.8.gz
                  -rwxr-xr-x ，亦即 -perm /755 时，但一个文件属性为 -rw-------
                  也会被列出来，因为他有 -rw.... 的属性存在！
 ```
+
+
+
+## 文件系统管理
+
+- df：列出文件系统的整体磁盘使用量；
+- du：评估文件系统的磁盘使用量（常用在推估目录所占容量）
+
+```
+[root@study ~]# df [-ahikHTm] [目录或文件名]
+选项与参数：
+-a  ：列出所有的文件系统，包括系统特有的 /proc 等文件系统；
+-k  ：以 KBytes 的容量显示各文件系统；
+-m  ：以 MBytes 的容量显示各文件系统；
+-h  ：以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示；
+-H  ：以 M=1000K 取代 M=1024K 的进位方式；
+-T  ：连同该 partition 的 filesystem 名称 （例如 xfs） 也列出；
+-i  ：不用磁盘容量，而以 inode 的数量来显示
+```
+
+- Filesystem：代表该文件系统是在哪个 partition ，所以列出设备名称；
+- 1k-blocks：说明下面的数字单位是 1KB 呦！可利用 -h 或 -m 来改变容量；
+- Used：顾名思义，就是使用掉的磁盘空间啦！
+- Available：也就是剩下的磁盘空间大小；
+- Use%：就是磁盘的使用率啦！如果使用率高达 90% 以上时， 最好需要注意一下了，免得容量不足造成系统问题喔！（例如最容易被灌爆的 /var/spool/mail 这个放置邮件的磁盘）
+- Mounted on：就是磁盘挂载的目录所在啦！（挂载点）
