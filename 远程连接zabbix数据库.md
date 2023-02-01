@@ -2,6 +2,9 @@
 
 Navicate 无法远程连接连接 mariadb(mysql)
 
+![image](https://user-images.githubusercontent.com/59044398/216087145-4352ff45-3e11-4a3d-8f8b-6730b50de513.png)
+
+
 笔者用的是Debian 11 安装 zabbix
 
 解决方法
