@@ -47,3 +47,85 @@ Navicate 无法远程连接连接 mariadb(mysql)
 
 
 
+### 如果还是无法连接，请尝试以下动作
+
+清空防火墙规则
+
+    iptables -F
+
+卸载 ufw 防火墙
+
+    apt-get remove ufw
+    
+登录数据库中查询连接端口
+
+    mysql -u root -p
+
+    MariaDB [(none)]> show global variables like 'port';
+
+![image](https://user-images.githubusercontent.com/59044398/216212732-13c65799-5a50-49bb-92f7-73e823e9273b.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
