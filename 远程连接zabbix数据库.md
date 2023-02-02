@@ -9,7 +9,7 @@ Navicate 无法远程连接连接 mariadb(mysql)
 
 ## 解决方法
 
-### 进入目录，更改配置文件
+### 1.进入目录，更改配置文件
 
     /etc/mysql/mariadb.conf.d
 
@@ -20,7 +20,7 @@ Navicate 无法远程连接连接 mariadb(mysql)
 
 ![image](https://user-images.githubusercontent.com/59044398/216082153-9eaf74e3-7bc7-4567-b014-56bd415d5088.png)
 
-### 开启远程访问权限
+### 2.开启远程访问权限
 
 
 输入命令登录mysql
@@ -47,16 +47,8 @@ Navicate 无法远程连接连接 mariadb(mysql)
 
 
 
-### 如果还是无法连接，请尝试以下动作
+### 3.如果还是无法连接，请尝试以下动作
 
-清空防火墙规则
-
-    iptables -F
-
-卸载 ufw 防火墙
-
-    apt-get remove ufw
-    
 登录数据库中查询连接端口
 
     mysql -u root -p
@@ -66,66 +58,30 @@ Navicate 无法远程连接连接 mariadb(mysql)
 ![image](https://user-images.githubusercontent.com/59044398/216212732-13c65799-5a50-49bb-92f7-73e823e9273b.png)
 
 
+放行端口
+
+    iptables -I INPUT -p tcp -m tcp --dport 8070 -j ACCEPT
+    
+#### 还是不行，尝试清空防火墙    
+
+清空防火墙规则
+
+    iptables -F
+
+卸载 ufw 防火墙
+
+    apt-get remove ufw
+    
+
+
+
+感谢马群的各位热心指导
+
 
 
 参考：
 
 https://blog.csdn.net/zhangpeterx/article/details/88885572
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
