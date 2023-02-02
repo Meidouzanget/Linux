@@ -68,7 +68,9 @@ Navicate 无法远程连接连接 mariadb(mysql)
 
 
 
+参考：
 
+https://blog.csdn.net/zhangpeterx/article/details/88885572
 
 
 
