@@ -1,8 +1,8 @@
 # Linux
-
+##### 常用命令
 ```
 安装mariadb
-sudo zypper install MariaDB-server MariaDB-client
+sudo zypper in mariadb mariadb-client
 
 #启动mariadb服务
 systemctl start mariadb;
@@ -17,7 +17,7 @@ systemctl stop mariadb;
 systemctl restart mariadb
 ```
 
-###### openSUSE系统已预装了MariaDB ，首先我们要更新一下
+##### openSUSE系统已预装了MariaDB ，首先我们要更新一下
 
 ```
 执行所系统所有软件更新
@@ -27,6 +27,24 @@ zypper dist-upgrade
 zypper update mariadb
 ```
 
+##### 数据库安全初始化
+
+设置确定删除匿名用户、远程禁用 root 登录、删除测试数据库及其访问权限以及应用所有更改的操作
+
+如果实在局域网环境，root远程登录不建议禁用
+```
+mysql_secure_installation
+
+Switch to unix_socket authentication? Y
+Change the root passwword？ Y	(修改密码)
+Remove anonymous users? Y	(移除匿名用户)
+Disallow root login remotely N	(禁用远程登陆)
+Reload privilege tables now？ Y
+```
+```
+进入数据库测试一下密码对不对，如果设错了进不了建议卸载重装，比较省事
+mysql -u root -p
+```
 
 
 #### 设置远程连接
@@ -40,11 +58,12 @@ zypper update mariadb
 
 ##### 2. 授权 Mariadb 连接用户的远程访问权限。您可以使用以下命令创建一个新用户，并授权该用户从任何位置连接到 Mariadb 服务器：
 ```
-   mysql -u root -p
+   mysql -u root -p（进入数据库）
    #输入管理员密码后进入 Mariadb 命令行
    CREATE USER 'username'@'%' IDENTIFIED BY 'password';
    GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' WITH GRANT OPTION;
    FLUSH PRIVILEGES;
+   \q
    
    其中，username 和 password 是您要创建的新用户的用户名和密码。% 表示允许该用户从任何远程客户端连接到 Mariadb 服务器 
    
